@@ -188,6 +188,57 @@
 
 </div>
 
+<section class="card">
+    <h2 id="toggle-fu" style="cursor:pointer;">
+        ▼ 符計算ツール（クリックで開く）
+    </h2>
+
+    <div id="fu-tool" style="display:none; margin-top:10px;">
+
+        <label>
+            <input type="checkbox" id="menzen"> 門前（リーチ・ツモなど）
+        </label><br>
+
+        <label>
+            <input type="checkbox" id="naki"> 鳴いている（副露）
+        </label><br>
+
+        <label>
+            <input type="checkbox" id="tsumo"> ツモ和了
+        </label>
+
+        <h3>待ちの種類</h3>
+        <select id="machi">
+            <option value="0">両面（0符）</option>
+            <option value="2">カンチャン（+2符）</option>
+            <option value="2p">ペンチャン（+2符）</option>
+            <option value="2t">単騎（+2符）</option>
+        </select>
+
+        <h3>雀頭（頭）</h3>
+        <select id="atama">
+            <option value="0">一般牌（0符）</option>
+            <option value="2">役牌（白・發・中）(+2符)</option>
+            <option value="2w">自風・場風 (+2符)</option>
+        </select>
+
+        <h3>面子（刻子・順子）</h3>
+        <select id="mentsu">
+            <option value="0">すべて順子（0符）</option>
+            <option value="2">中張牌の刻子（+2符）</option>
+            <option value="4">ヤオ九牌の刻子（+4符）</option>
+            <option value="8">中張牌の暗刻（+8符）</option>
+            <option value="16">ヤオ九牌の暗刻（+16符）</option>
+        </select>
+
+        <button id="calc-fu" class="btn-primary" style="margin-top:10px;">
+            符を計算する
+        </button>
+
+        <div id="fu-result" style="margin-top:10px; font-weight:bold;"></div>
+    </div>
+</section>
+
 
 <section class="card">
     <h2>点数計算ツール（符計算）</h2>

@@ -494,6 +494,64 @@ document.getElementById("toggle-yaku").addEventListener("click", () => {
     }
 });
 
+// ===============================
+//  符計算ツール 折りたたみ
+// ===============================
+document.getElementById("toggle-fu").addEventListener("click", () => {
+    const box = document.getElementById("fu-tool");
+    const title = document.getElementById("toggle-fu");
+
+    if (box.style.display === "none") {
+        box.style.display = "block";
+        title.textContent = "▲ 符計算ツール（クリックで閉じる）";
+    } else {
+        box.style.display = "none";
+        title.textContent = "▼ 符計算ツール（クリックで開く）";
+    }
+});
+
+
+// ===============================
+//  符計算ロジック（鳴き対応）
+// ===============================
+document.getElementById("calc-fu").addEventListener("click", () => {
+    let fu = 20; // 基本符
+
+    const menzen = document.getElementById("menzen").checked;
+    const tsumo = document.getElementById("tsumo").checked;
+    const naki = document.getElementById("naki").checked;
+
+    // 面子（鳴きなら符が半分になる）
+    let mentsu = Number(document.getElementById("mentsu").value);
+    if (naki) {
+        mentsu = Math.floor(mentsu / 2);
+    }
+    fu += mentsu;
+
+    // 待ち
+    const machi = document.getElementById("machi").value;
+    if (machi !== "0") fu += 2;
+
+    // 雀頭
+    const atama = document.getElementById("atama").value;
+    if (atama !== "0") fu += 2;
+
+    // ツモ
+    if (tsumo) fu += 2;
+
+    // 門前ロン +10符（鳴きなら付かない）
+    if (menzen && !tsumo && !naki) fu += 10;
+
+    // 10符単位に切り上げ
+    fu = Math.ceil(fu / 10) * 10;
+
+    document.getElementById("fu-result").textContent = `符：${fu}符`;
+
+    // 点数計算ツールに自動入力
+    const fuInput = document.getElementById("fu-input");
+    if (fuInput) fuInput.value = fu;
+});
+
 
 // ===============================
 //  点数計算（符 × 翻）
