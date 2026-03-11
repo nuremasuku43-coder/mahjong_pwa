@@ -510,6 +510,45 @@ document.getElementById("toggle-fu").addEventListener("click", () => {
     }
 });
 
+// ===============================
+//  面子追加 UI
+// ===============================
+document.getElementById("add-mentsu").addEventListener("click", () => {
+    const area = document.getElementById("mentsu-list");
+
+    const div = document.createElement("div");
+    div.className = "mentsu-row";
+    div.style.marginBottom = "8px";
+
+    div.innerHTML = `
+        <select class="mentsu-type">
+            <option value="0">順子（0符）</option>
+
+            <option value="2">中張牌の明刻（+2符）</option>
+            <option value="4">ヤオ九牌の明刻（+4符）</option>
+
+            <option value="4a">中張牌の暗刻（+4符）</option>
+            <option value="8a">ヤオ九牌の暗刻（+8符）</option>
+
+            <option value="8k">中張牌の明槓（+8符）</option>
+            <option value="16k">ヤオ九牌の明槓（+16符）</option>
+
+            <option value="16ka">中張牌の暗槓（+16符）</option>
+            <option value="32ka">ヤオ九牌の暗槓（+32符）</option>
+        </select>
+
+        <button class="remove-mentsu btn-danger">削除</button>
+    `;
+
+    area.appendChild(div);
+
+    // 削除ボタン
+    div.querySelector(".remove-mentsu").addEventListener("click", () => {
+        div.remove();
+    });
+});
+
+
 
 // ===============================
 //  符計算ロジック（鳴き対応）
@@ -521,12 +560,30 @@ document.getElementById("calc-fu").addEventListener("click", () => {
     const tsumo = document.getElementById("tsumo").checked;
     const naki = document.getElementById("naki").checked;
 
-    // 面子（鳴きなら符が半分になる）
-    let mentsu = Number(document.getElementById("mentsu").value);
-    if (naki) {
-        mentsu = Math.floor(mentsu / 2);
+// 面子（複数対応）
+let mentsuTotal = 0;
+
+document.querySelectorAll(".mentsu-type").forEach(sel => {
+    const v = sel.value;
+
+    if (v === "0") return;
+
+    if (v.endsWith("ka")) {
+        // 暗槓
+        mentsuTotal += Number(v.replace("ka", ""));
+    } else if (v.endsWith("k")) {
+        // 明槓
+        mentsuTotal += Number(v.replace("k", ""));
+    } else if (v.endsWith("a")) {
+        // 暗刻
+        mentsuTotal += Number(v.replace("a", ""));
+    } else {
+        // 明刻
+        mentsuTotal += Number(v);
     }
-    fu += mentsu;
+});
+
+fu += mentsuTotal;
 
     // 待ち
     const machi = document.getElementById("machi").value;
