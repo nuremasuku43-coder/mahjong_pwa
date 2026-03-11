@@ -511,6 +511,27 @@ document.getElementById("toggle-fu").addEventListener("click", () => {
 });
 
 // ===============================
+//  文字サイズ変更
+// ===============================
+function applyFontSize(size) {
+    document.body.classList.remove("font-small", "font-medium", "font-large");
+    document.body.classList.add(`font-${size}`);
+    localStorage.setItem("fontSize", size);
+}
+
+document.querySelectorAll(".font-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const size = btn.dataset.size;
+        applyFontSize(size);
+    });
+});
+
+// 初期読み込み
+const savedFont = localStorage.getItem("fontSize") || "medium";
+applyFontSize(savedFont);
+
+
+// ===============================
 //  面子追加 UI
 // ===============================
 document.getElementById("add-mentsu").addEventListener("click", () => {
