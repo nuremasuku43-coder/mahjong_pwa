@@ -45,20 +45,6 @@
     </label>
 </section>
 
-
-<section class="card">
-    <h2>プレイヤー名プリセット</h2>
-
-    <div class="preset-player-buttons">
-        <button class="btn-secondary player-preset" data-names="太郎,次郎,三郎,四郎">固定メンバーA</button>
-        <button class="btn-secondary player-preset" data-names="A子,B子,C子,D子">固定メンバーB</button>
-    </div>
-
-    <p style="margin-top:10px; font-size:0.9em;">
-        ※ ボタンを押すと、半荘入力欄に自動で名前が入ります
-    </p>
-</section>
-
 <section class="card">
     <h2>プレイヤー名プリセット</h2>
 
@@ -88,22 +74,26 @@
     <section class="card">
         <h2>半荘入力</h2>
         <form id="hanchan-form" class="form-grid">
-            <div class="row">
-                <input name="player" placeholder="プレイヤー名" required>
-                <input name="score" placeholder="最終持ち点" type="number" required>
-            </div>
-            <div class="row">
-                <input name="player" placeholder="プレイヤー名" required>
-                <input name="score" placeholder="最終持ち点" type="number" required>
-            </div>
-            <div class="row">
-                <input name="player" placeholder="プレイヤー名" required>
-                <input name="score" placeholder="最終持ち点" type="number" required>
-            </div>
-            <div class="row">
-                <input name="player" placeholder="プレイヤー名" required>
-                <input name="score" placeholder="最終持ち点" type="number" required>
-            </div>
+<div class="row player-row">
+    <span class="player-label"></span>
+    <input name="player" placeholder="プレイヤー名" required>
+    <input name="score" placeholder="最終持ち点" type="number" required>
+</div>
+<div class="row player-row">
+    <span class="player-label"></span>
+    <input name="player" placeholder="プレイヤー名" required>
+    <input name="score" placeholder="最終持ち点" type="number" required>
+</div>
+<div class="row player-row">
+    <span class="player-label"></span>
+    <input name="player" placeholder="プレイヤー名" required>
+    <input name="score" placeholder="最終持ち点" type="number" required>
+</div>
+<div class="row player-row">
+    <span class="player-label"></span>
+    <input name="player" placeholder="プレイヤー名" required>
+    <input name="score" placeholder="最終持ち点" type="number" required>
+</div>
 
             <button type="submit" class="btn-primary">この半荘を登録</button>
         </form>
@@ -201,3 +191,74 @@
 <script src="static/app.js"></script>
 </body>
 </html>
+
+<section class="card">
+    <h2>点数計算ツール（符計算）</h2>
+
+    <div class="row">
+        <input id="fu-input" type="number" placeholder="符（例：30）">
+        <input id="han-input" type="number" placeholder="翻（例：3）">
+    </div>
+
+    <button id="calc-score" class="btn-primary">点数を計算する</button>
+
+    <div id="score-result" style="margin-top:10px; font-weight:bold;"></div>
+</section>
+
+<section class="card">
+    <h2 id="toggle-yaku" style="cursor:pointer;">
+        ▼ 役一覧・翻数（クリックで開く）
+    </h2>
+
+    <div id="yaku-content" style="display:none; margin-top:10px;">
+
+        <h3>1翻（よく出る基本役）</h3>
+        <ul>
+            <li>立直（リーチ）</li>
+            <li>門前清自摸和（ツモ）</li>
+            <li>断么九（タンヤオ）</li>
+            <li>平和（ピンフ）</li>
+            <li>一盃口（イーペーコー）</li>
+            <li>役牌（白・發・中・場風・自風）</li>
+        </ul>
+
+        <h3>2翻</h3>
+        <ul>
+            <li>ダブル立直</li>
+            <li>七対子（チートイツ）</li>
+            <li>対々和（トイトイ）</li>
+            <li>三色同順</li>
+            <li>一気通貫</li>
+            <li>混全帯么九（チャンタ）</li>
+            <li>三暗刻</li>
+        </ul>
+
+        <h3>3翻</h3>
+        <ul>
+            <li>混一色（ホンイツ）</li>
+            <li>純全帯么九（ジュンチャン）</li>
+            <li>二盃口（リャンペーコー）</li>
+        </ul>
+
+        <h3>6翻（満貫扱い）</h3>
+        <ul>
+            <li>清一色（チンイツ）</li>
+        </ul>
+
+        <h3>役満（13翻相当）</h3>
+        <ul>
+            <li>国士無双</li>
+            <li>四暗刻</li>
+            <li>大三元</li>
+            <li>小四喜 / 大四喜</li>
+            <li>字一色</li>
+            <li>緑一色</li>
+            <li>清老頭</li>
+            <li>四槓子</li>
+            <li>九蓮宝燈</li>
+        </ul>
+
+    </div>
+</section>
+
+

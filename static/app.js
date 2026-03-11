@@ -312,6 +312,7 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 function applyFixedMode() {
     const fixed = document.getElementById("fixed-mode").checked;
     const playerInputs = document.querySelectorAll("input[name='player']");
+    const labels = document.querySelectorAll(".player-label");
 
     if (fixed) {
         // 名前欄を隠す
@@ -325,18 +326,28 @@ function applyFixedMode() {
             const names = JSON.parse(last);
             names.forEach((name, idx) => {
                 playerInputs[idx].value = name;
+                labels[idx].textContent = name + "：";
             });
         }
+
+        // ラベルを表示
+        labels.forEach(label => {
+            label.style.display = "inline-block";
+        });
+
     } else {
         // 名前欄を表示
         playerInputs.forEach(input => {
             input.style.display = "inline-block";
         });
+
+        // ラベルを非表示
+        labels.forEach(label => {
+            label.style.display = "none";
+        });
     }
 }
 
-// チェックボックス変更時
-document.getElementById("fixed-mode").addEventListener("change", applyFixedMode);
 
 // ===============================
 //  プレイヤー名プリセット
@@ -465,6 +476,84 @@ document.getElementById("toggle-explain").addEventListener("click", () => {
         content.style.display = "none";
         title.textContent = "▼ ウマ・オカの説明（クリックで開く）";
     }
+});
+
+// ===============================
+//  役一覧 折りたたみ
+// ===============================
+document.getElementById("toggle-yaku").addEventListener("click", () => {
+    const content = document.getElementById("yaku-content");
+    const title = document.getElementById("toggle-yaku");
+
+    if (content.style.display === "none") {
+        content.style.display = "block";
+        title.textContent = "▲ 役一覧・翻数（クリックで閉じる）";
+    } else {
+        content.style.display = "none";
+        title.textContent = "▼ 役一覧・翻数（クリックで開く）";
+    }
+});
+
+
+// ===============================
+//  点数計算（符 × 翻）
+// ===============================
+document.getElementById("calc-score").addEventListener("click", () => {
+    const fu = Number(document.getElementById("fu-input").value);
+    const han = Number(document.getElementById("han-input").value);
+    const resultArea = document.getElementById("score-result");
+
+    if (!fu || !han) {
+        resultArea.textContent = "符と翻を入力してください。";
+        return;
+    }
+
+    // 満貫以上の判定
+    if (han >= 13) {
+        resultArea.textContent = "役満：32000点（親） / 16000点（子）";
+        return;
+    }
+    if (han >= 11) {
+        resultArea.textContent = "三倍満：24000点（親） / 12000点（子）";
+        return;
+    }
+    if (han >= 8) {
+        resultArea.textContent = "倍満：16000点（親） / 8000点（子）";
+        return;
+    }
+    if (han >= 6) {
+        resultArea.textContent = "跳満：12000点（親） / 6000点（子）";
+        return;
+    }
+    if (han >= 5) {
+        resultArea.textContent = "満貫：12000点（親） / 8000点（子）";
+        return;
+    }
+
+    // 基本点
+    let base = fu * Math.pow(2, han + 2);
+
+    // 子のロン
+    let koRon = Math.ceil(base * 4 / 100) * 100;
+
+    // 親のロン
+    let oyaRon = Math.ceil(base * 6 / 100) * 100;
+
+    // 子のツモ（親から）
+    let koTsumoOya = Math.ceil(base * 2 / 100) * 100;
+
+    // 子のツモ（子から）
+    let koTsumoKo = Math.ceil(base / 100) * 100;
+
+    // 親のツモ（全員から）
+    let oyaTsumo = Math.ceil(base * 2 / 100) * 100;
+
+    resultArea.innerHTML = `
+        親ロン：${oyaRon} 点<br>
+        子ロン：${koRon} 点<br>
+        親ツモ：${oyaTsumo} オール<br>
+        子ツモ：${koTsumoOya}（親） / ${koTsumoKo}（子）
+    `;
 });
 
 
