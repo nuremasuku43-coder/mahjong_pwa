@@ -21,6 +21,28 @@
 <div class="container">
     <h1>麻雀スコア集計</h1>
 
+<section class="card">
+    <h2>ウマ・オカ設定</h2>
+    <div class="row">
+        <input id="uma-input" placeholder="ウマ（例: 20,10,-10,-20）" value="20,10,-10,-20">
+        <input id="oka-input" placeholder="オカ（例: 25000）" value="25000">
+    </div>
+    <button id="save-settings" class="btn-primary">設定を保存</button>
+</section>
+
+<section class="card">
+    <h2>日付ごとの成績</h2>
+    <div id="daily-total-area">
+        <p>まだデータがありません。</p>
+    </div>
+</section>
+
+<section class="card">
+    <h2>データ管理</h2>
+    <button id="reset-btn" class="btn-danger">全データをリセット</button>
+</section>
+
+
     <section class="card">
         <h2>半荘入力</h2>
         <form id="hanchan-form" class="form-grid">
