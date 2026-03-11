@@ -56,3 +56,22 @@ th, td {
 .hanchan-block {
     margin-top: 12px;
 }
+
+.preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-secondary {
+    background: #ddd;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #ccc;
+}

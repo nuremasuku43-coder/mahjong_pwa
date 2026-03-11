@@ -1,11 +1,41 @@
 // ===============================
-//  定数
+//  設定（ウマ・オカ）
 // ===============================
-const UMA = [20, 10, -10, -20];
-const BASE_SCORE = 25000;
+function loadSettings() {
+    const uma = localStorage.getItem("uma");
+    const oka = localStorage.getItem("oka");
+
+    return {
+        UMA: uma ? uma.split(",").map(Number) : [20, 10, -10, -20],
+        BASE_SCORE: oka ? Number(oka) : 25000
+    };
+}
+
+function saveSettings(uma, oka) {
+    localStorage.setItem("uma", uma);
+    localStorage.setItem("oka", oka);
+}
 
 // ===============================
-//  LocalStorage からデータ取得
+//  ウマ・オカ プリセット
+// ===============================
+document.querySelectorAll(".preset").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const uma = btn.dataset.uma;
+        const oka = btn.dataset.oka;
+
+        document.getElementById("uma-input").value = uma;
+        document.getElementById("oka-input").value = oka;
+
+        saveSettings(uma, oka);
+
+        alert(`プリセット「${btn.textContent}」を適用しました`);
+    });
+});
+
+
+// ===============================
+//  履歴の保存・読み込み
 // ===============================
 function loadHistory() {
     const data = localStorage.getItem("hanchan_history");
@@ -20,14 +50,16 @@ function saveHistory(history) {
 //  半荘を追加
 // ===============================
 function addHanchan(players, scores) {
+    const settings = loadSettings();
+    const UMA = settings.UMA;
+    const BASE_SCORE = settings.BASE_SCORE;
+
     let history = loadHistory();
     const hanchanNo = history.length + 1;
 
-    // スコアを結合して並び替え
     const data = players.map((p, i) => ({ player: p, score: scores[i] }));
     const sorted = data.sort((a, b) => b.score - a.score);
 
-    // UMA + 素点計算
     const results = sorted.map((item, idx) => {
         const point = (item.score - BASE_SCORE) / 1000 + UMA[idx];
         return {
@@ -40,6 +72,7 @@ function addHanchan(players, scores) {
 
     history.push({
         no: hanchanNo,
+        date: new Date().toISOString().slice(0, 10),
         results: results
     });
 
@@ -47,7 +80,7 @@ function addHanchan(players, scores) {
 }
 
 // ===============================
-//  トータル成績を計算
+//  トータル成績
 // ===============================
 function calcTotalPoints() {
     const history = loadHistory();
@@ -60,13 +93,9 @@ function calcTotalPoints() {
         });
     });
 
-    return Object.entries(total)
-        .sort((a, b) => b[1] - a[1]); // 降順
+    return Object.entries(total).sort((a, b) => b[1] - a[1]);
 }
 
-// ===============================
-//  画面に表示
-// ===============================
 function renderTotal() {
     const area = document.getElementById("total-table-area");
     const total = calcTotalPoints();
@@ -98,6 +127,71 @@ function renderTotal() {
     area.innerHTML = html;
 }
 
+// ===============================
+//  日付ごとの成績
+// ===============================
+function calcDailyTotals() {
+    const history = loadHistory();
+    const daily = {};
+
+    history.forEach(h => {
+        const date = h.date;
+        if (!daily[date]) daily[date] = {};
+
+        h.results.forEach(r => {
+            if (!daily[date][r.player]) daily[date][r.player] = 0;
+            daily[date][r.player] += r.point;
+        });
+    });
+
+    return daily;
+}
+
+function renderDailyTotals() {
+    const area = document.getElementById("daily-total-area");
+    const daily = calcDailyTotals();
+
+    const dates = Object.keys(daily).sort();
+    if (dates.length === 0) {
+        area.innerHTML = "<p>まだデータがありません。</p>";
+        return;
+    }
+
+    let html = "";
+
+    dates.forEach(date => {
+        html += `<h3>${date}</h3>`;
+        html += `
+            <table>
+                <thead>
+                    <tr><th>プレイヤー</th><th>合計pt</th></tr>
+                </thead>
+                <tbody>
+        `;
+
+        const players = Object.entries(daily[date]).sort((a, b) => b[1] - a[1]);
+
+        players.forEach(([player, pt]) => {
+            html += `
+                <tr>
+                    <td>${player}</td>
+                    <td>${pt.toFixed(1)}</td>
+                </tr>
+            `;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+    });
+
+    area.innerHTML = html;
+}
+
+// ===============================
+//  履歴表示（削除ボタン付き）
+// ===============================
 function renderHistory() {
     const area = document.getElementById("history-area");
     const history = loadHistory();
@@ -112,7 +206,9 @@ function renderHistory() {
     history.slice().reverse().forEach(h => {
         html += `
             <div class="hanchan-block">
-                <h3>${h.no}回目の半荘</h3>
+                <h3>${h.no}回目の半荘 
+                    <button class="delete-hanchan" data-no="${h.no}">削除</button>
+                </h3>
                 <table>
                     <thead>
                         <tr><th>順位</th><th>プレイヤー</th><th>点数</th><th>pt</th></tr>
@@ -139,13 +235,61 @@ function renderHistory() {
     });
 
     area.innerHTML = html;
+    attachDeleteHandlers();
 }
 
 // ===============================
-//  フォーム送信処理
+//  個別削除
+// ===============================
+function attachDeleteHandlers() {
+    document.querySelectorAll(".delete-hanchan").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const no = Number(btn.dataset.no);
+            let history = loadHistory();
+
+            history = history.filter(h => h.no !== no);
+            history.forEach((h, idx) => h.no = idx + 1);
+
+            saveHistory(history);
+
+            renderTotal();
+            renderHistory();
+            renderDailyTotals();
+        });
+    });
+}
+
+// ===============================
+//  全削除
+// ===============================
+document.getElementById("reset-btn").addEventListener("click", () => {
+    if (!confirm("本当に全データを削除しますか？")) return;
+
+    localStorage.removeItem("hanchan_history");
+
+    renderTotal();
+    renderHistory();
+    renderDailyTotals();
+
+    alert("データをリセットしました");
+});
+
+// ===============================
+//  ウマ・オカ設定保存
+// ===============================
+document.getElementById("save-settings").addEventListener("click", () => {
+    const uma = document.getElementById("uma-input").value;
+    const oka = document.getElementById("oka-input").value;
+
+    saveSettings(uma, oka);
+    alert("設定を保存しました");
+});
+
+// ===============================
+//  半荘入力フォーム
 // ===============================
 document.getElementById("hanchan-form").addEventListener("submit", function(e) {
-    e.preventDefault(); // ページ遷移しない
+    e.preventDefault();
 
     const players = Array.from(document.querySelectorAll("input[name='player']")).map(i => i.value);
     const scores = Array.from(document.querySelectorAll("input[name='score']")).map(i => Number(i.value));
@@ -154,8 +298,8 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 
     renderTotal();
     renderHistory();
+    renderDailyTotals();
 
-    // 入力欄をクリア
     document.getElementById("hanchan-form").reset();
 });
 
@@ -164,3 +308,20 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 // ===============================
 renderTotal();
 renderHistory();
+renderDailyTotals();
+
+// ===============================
+//  ウマ・オカ説明 折りたたみ
+// ===============================
+document.getElementById("toggle-explain").addEventListener("click", () => {
+    const content = document.getElementById("explain-content");
+    const title = document.getElementById("toggle-explain");
+
+    if (content.style.display === "none") {
+        content.style.display = "block";
+        title.textContent = "▲ ウマ・オカの説明（クリックで閉じる）";
+    } else {
+        content.style.display = "none";
+        title.textContent = "▼ ウマ・オカの説明（クリックで開く）";
+    }
+});

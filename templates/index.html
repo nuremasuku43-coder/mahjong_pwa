@@ -21,28 +21,24 @@
 <div class="container">
     <h1>麻雀スコア集計</h1>
 
-<section class="card">
-    <h2>ウマ・オカ設定</h2>
-    <div class="row">
-        <input id="uma-input" placeholder="ウマ（例: 20,10,-10,-20）" value="20,10,-10,-20">
-        <input id="oka-input" placeholder="オカ（例: 25000）" value="25000">
-    </div>
-    <button id="save-settings" class="btn-primary">設定を保存</button>
-</section>
-
-<section class="card">
-    <h2>日付ごとの成績</h2>
-    <div id="daily-total-area">
-        <p>まだデータがありません。</p>
-    </div>
-</section>
-
-<section class="card">
-    <h2>データ管理</h2>
-    <button id="reset-btn" class="btn-danger">全データをリセット</button>
-</section>
+    <!-- ▼▼ ウマ・オカ設定 ▼▼ -->
+    <section class="card">
+        <h2>ウマ・オカ設定</h2>
+        <div class="row">
+            <input id="uma-input" placeholder="ウマ（例: 20,10,-10,-20）" value="20,10,-10,-20">
+            <input id="oka-input" placeholder="オカ（例: 25000）" value="25000">
+        </div>
+        <button id="save-settings" class="btn-primary">設定を保存</button>
+    </section>
+<div class="preset-buttons">
+    <button class="btn-secondary preset" data-uma="20,10,-10,-20" data-oka="25000">一般（20-10）</button>
+    <button class="btn-secondary preset" data-uma="30,10,-10,-30" data-oka="30000">Mリーグ</button>
+    <button class="btn-secondary preset" data-uma="10,5,-5,-10" data-oka="25000">競技（10-5）</button>
+    <button class="btn-secondary preset" data-uma="15,5,-5,-15" data-oka="25000">東風戦</button>
+</div>
 
 
+    <!-- ▼▼ 半荘入力 ▼▼ -->
     <section class="card">
         <h2>半荘入力</h2>
         <form id="hanchan-form" class="form-grid">
@@ -67,6 +63,7 @@
         </form>
     </section>
 
+    <!-- ▼▼ トータル成績 ▼▼ -->
     <section class="card">
         <h2>トータル成績</h2>
         <div id="total-table-area">
@@ -74,12 +71,85 @@
         </div>
     </section>
 
+<section class="card">
+    <h2 id="toggle-explain" style="cursor:pointer;">
+        ▼ ウマ・オカの説明（クリックで開く）
+    </h2>
+
+    <div id="explain-content" style="display:none; margin-top:10px;">
+        <p>
+            麻雀の最終ポイントは、<strong>素点（最終持ち点）</strong>に
+            <strong>ウマ</strong>と<strong>オカ</strong>を加えて計算します。
+        </p>
+
+        <h3>① 素点（最終持ち点）</h3>
+        <p>
+            半荘終了時の持ち点から<strong>基準点（オカ）</strong>を引き、
+            1000点 = 1pt として換算します。
+            <br>
+            例：持ち点 32,000 → (32,000 - 25,000) / 1000 = +7.0pt
+        </p>
+
+        <h3>② ウマ（順位点）</h3>
+        <p>
+            順位に応じて加算されるポイントです。
+            <br>
+            例：20-10-(-10)-(-20) の場合
+        </p>
+        <ul>
+            <li>1位：+20pt</li>
+            <li>2位：+10pt</li>
+            <li>3位：-10pt</li>
+            <li>4位：-20pt</li>
+        </ul>
+
+        <h3>③ オカ（基準点）</h3>
+        <p>
+            基準点（通常 25,000点）より多ければプラス、少なければマイナスになります。
+            <br>
+            Mリーグでは 30,000点が基準点です。
+        </p>
+
+        <h3>④ 最終ポイントの計算式</h3>
+        <pre style="background:#f5f5f5; padding:10px; border-radius:6px;">
+最終ポイント = (最終持ち点 - オカ) / 1000 + ウマ
+        </pre>
+
+        <h3>⑤ 計算例</h3>
+        <pre style="background:#f5f5f5; padding:10px; border-radius:6px;">
+【例】持ち点 32,000点、1位、ウマ20-10-(-10)-(-20)、オカ25,000 の場合
+
+素点： (32,000 - 25,000) / 1000 = +7.0
+ウマ： +20
+--------------------------------
+最終ポイント： 27.0pt
+        </pre>
+    </div>
+</section>
+
+
+    <!-- ▼▼ 日付ごとの成績 ▼▼ -->
+    <section class="card">
+        <h2>日付ごとの成績</h2>
+        <div id="daily-total-area">
+            <p>まだデータがありません。</p>
+        </div>
+    </section>
+
+    <!-- ▼▼ 半荘履歴 ▼▼ -->
     <section class="card">
         <h2>半荘履歴</h2>
         <div id="history-area">
             <p>履歴はまだありません。</p>
         </div>
     </section>
+
+    <!-- ▼▼ データ管理 ▼▼ -->
+    <section class="card">
+        <h2>データ管理</h2>
+        <button id="reset-btn" class="btn-danger">全データをリセット</button>
+    </section>
+
 </div>
 
 <script src="static/app.js"></script>
