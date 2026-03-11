@@ -42,15 +42,15 @@
             <thead>
                 <tr><th>順位</th><th>プレイヤー</th><th>トータルpt</th></tr>
             </thead>
-            <tbody>
-                {% for idx, (player, pt) in enumerate(total_sorted) %}
-                <tr>
-                    <td>{{ idx + 1 }}</td>
-                    <td>{{ player }}</td>
-                    <td>{{ "%.1f"|format(pt) }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+<tbody>
+    {% for player, pt in total_sorted %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ player }}</td>
+        <td>{{ "%.1f"|format(pt) }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
         </table>
         {% else %}
         <p>まだ対局が登録されていません。</p>
