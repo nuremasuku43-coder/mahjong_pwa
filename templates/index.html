@@ -37,6 +37,52 @@
     <button class="btn-secondary preset" data-uma="15,5,-5,-15" data-oka="25000">東風戦</button>
 </div>
 
+<section class="card">
+    <h2>固定4人モード</h2>
+    <label style="display:flex; align-items:center; gap:10px;">
+        <input type="checkbox" id="fixed-mode">
+        固定4人でプレイする（名前入力欄を非表示にする）
+    </label>
+</section>
+
+
+<section class="card">
+    <h2>プレイヤー名プリセット</h2>
+
+    <div class="preset-player-buttons">
+        <button class="btn-secondary player-preset" data-names="太郎,次郎,三郎,四郎">固定メンバーA</button>
+        <button class="btn-secondary player-preset" data-names="A子,B子,C子,D子">固定メンバーB</button>
+    </div>
+
+    <p style="margin-top:10px; font-size:0.9em;">
+        ※ ボタンを押すと、半荘入力欄に自動で名前が入ります
+    </p>
+</section>
+
+<section class="card">
+    <h2>プレイヤー名プリセット</h2>
+
+    <div class="preset-player-buttons" id="player-preset-area">
+        <!-- ここにプリセットボタンが自動で追加される -->
+    </div>
+
+    <h3>プリセットを追加</h3>
+    <div class="row">
+        <input id="preset-name" placeholder="プリセット名（例：固定メンバーA）">
+    </div>
+    <div class="row">
+        <input id="preset-player1" placeholder="プレイヤー1">
+        <input id="preset-player2" placeholder="プレイヤー2">
+    </div>
+    <div class="row">
+        <input id="preset-player3" placeholder="プレイヤー3">
+        <input id="preset-player4" placeholder="プレイヤー4">
+    </div>
+
+    <button id="add-player-preset" class="btn-primary">プリセットを追加</button>
+</section>
+
+
 
     <!-- ▼▼ 半荘入力 ▼▼ -->
     <section class="card">

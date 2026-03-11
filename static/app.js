@@ -296,6 +296,8 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 
     addHanchan(players, scores);
 
+    localStorage.setItem("last_players", JSON.stringify(players));
+
     renderTotal();
     renderHistory();
     renderDailyTotals();
@@ -303,12 +305,151 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
     document.getElementById("hanchan-form").reset();
 });
 
+
 // ===============================
-//  初期表示
+//  固定4人モード
 // ===============================
-renderTotal();
-renderHistory();
-renderDailyTotals();
+function applyFixedMode() {
+    const fixed = document.getElementById("fixed-mode").checked;
+    const playerInputs = document.querySelectorAll("input[name='player']");
+
+    if (fixed) {
+        // 名前欄を隠す
+        playerInputs.forEach(input => {
+            input.style.display = "none";
+        });
+
+        // 最後に使った名前を自動セット
+        const last = localStorage.getItem("last_players");
+        if (last) {
+            const names = JSON.parse(last);
+            names.forEach((name, idx) => {
+                playerInputs[idx].value = name;
+            });
+        }
+    } else {
+        // 名前欄を表示
+        playerInputs.forEach(input => {
+            input.style.display = "inline-block";
+        });
+    }
+}
+
+// チェックボックス変更時
+document.getElementById("fixed-mode").addEventListener("change", applyFixedMode);
+
+// ===============================
+//  プレイヤー名プリセット
+// ===============================
+document.querySelectorAll(".player-preset").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const names = btn.dataset.names.split(",");
+
+        const inputs = document.querySelectorAll("input[name='player']");
+        inputs.forEach((input, idx) => {
+            input.value = names[idx] || "";
+        });
+
+        alert(`プリセット「${btn.textContent}」を適用しました`);
+    });
+});
+
+// ===============================
+//  プレイヤー名プリセット（保存・読み込み）
+// ===============================
+function loadPlayerPresets() {
+    const data = localStorage.getItem("player_presets");
+    return data ? JSON.parse(data) : [];
+}
+
+function savePlayerPresets(presets) {
+    localStorage.setItem("player_presets", JSON.stringify(presets));
+}
+
+// ===============================
+//  プリセットを画面に表示
+// ===============================
+function renderPlayerPresets() {
+    const area = document.getElementById("player-preset-area");
+    const presets = loadPlayerPresets();
+
+    area.innerHTML = "";
+
+    presets.forEach((preset, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "btn-secondary player-preset";
+        btn.textContent = preset.name;
+        btn.dataset.names = preset.players.join(",");
+        area.appendChild(btn);
+    });
+
+    attachPlayerPresetHandlers();
+}
+
+// ===============================
+//  プリセット適用
+// ===============================
+function attachPlayerPresetHandlers() {
+    document.querySelectorAll(".player-preset").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const names = btn.dataset.names.split(",");
+            const inputs = document.querySelectorAll("input[name='player']");
+
+            inputs.forEach((input, idx) => {
+                input.value = names[idx] || "";
+            });
+
+            // 最後に使った名前として保存
+            localStorage.setItem("last_players", JSON.stringify(names));
+
+            alert(`プリセット「${btn.textContent}」を適用しました`);
+        });
+    });
+}
+
+// ===============================
+//  プリセット追加ボタン
+// ===============================
+document.getElementById("add-player-preset").addEventListener("click", () => {
+    const name = document.getElementById("preset-name").value;
+    const p1 = document.getElementById("preset-player1").value;
+    const p2 = document.getElementById("preset-player2").value;
+    const p3 = document.getElementById("preset-player3").value;
+    const p4 = document.getElementById("preset-player4").value;
+
+    if (!name || !p1 || !p2 || !p3 || !p4) {
+        alert("プリセット名と4人の名前を入力してください");
+        return;
+    }
+
+    const presets = loadPlayerPresets();
+    presets.push({
+        name: name,
+        players: [p1, p2, p3, p4]
+    });
+
+    savePlayerPresets(presets);
+    renderPlayerPresets();
+
+    alert("プリセットを追加しました");
+});
+
+// ===============================
+//  最後に使った名前を自動入力
+// ===============================
+function loadLastPlayers() {
+    const data = localStorage.getItem("last_players");
+    if (!data) return;
+
+    const names = JSON.parse(data);
+    const inputs = document.querySelectorAll("input[name='player']");
+
+    inputs.forEach((input, idx) => {
+        input.value = names[idx] || "";
+    });
+}
+
+
 
 // ===============================
 //  ウマ・オカ説明 折りたたみ
@@ -325,3 +466,15 @@ document.getElementById("toggle-explain").addEventListener("click", () => {
         title.textContent = "▼ ウマ・オカの説明（クリックで開く）";
     }
 });
+
+
+
+// ===============================
+//  初期表示
+// ===============================
+renderTotal();
+renderHistory();
+renderDailyTotals();
+renderPlayerPresets();
+loadLastPlayers();
+applyFixedMode();
