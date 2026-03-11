@@ -623,7 +623,7 @@ document.getElementById("calc-score").addEventListener("click", () => {
         return;
     }
 
-    // 満貫以上の判定
+    // 役満系
     if (han >= 13) {
         resultArea.textContent = "役満：32000点（親） / 16000点（子）";
         return;
@@ -640,27 +640,26 @@ document.getElementById("calc-score").addEventListener("click", () => {
         resultArea.textContent = "跳満：12000点（親） / 6000点（子）";
         return;
     }
-    if (han >= 5) {
+
+    // 満貫判定（翻＋符で決まるパターンを考慮）
+    const isMangan =
+        han >= 5 ||
+        (han === 4 && fu >= 40) ||
+        (han === 3 && fu >= 70);
+
+    if (isMangan) {
         resultArea.textContent = "満貫：12000点（親） / 8000点（子）";
         return;
     }
 
-    // 基本点
+    // ここから下は通常計算
     let base = fu * Math.pow(2, han + 2);
 
-    // 子のロン
     let koRon = Math.ceil(base * 4 / 100) * 100;
-
-    // 親のロン
     let oyaRon = Math.ceil(base * 6 / 100) * 100;
 
-    // 子のツモ（親から）
     let koTsumoOya = Math.ceil(base * 2 / 100) * 100;
-
-    // 子のツモ（子から）
     let koTsumoKo = Math.ceil(base / 100) * 100;
-
-    // 親のツモ（全員から）
     let oyaTsumo = Math.ceil(base * 2 / 100) * 100;
 
     resultArea.innerHTML = `
