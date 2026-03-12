@@ -230,3 +230,9 @@ body.font-large { font-size: 20px; }
     color: #aaa;
 }
 
+
+input[name="score"] {
+    min-width: 0;        /* ← iPhone のはみ出しバグ対策（最重要） */
+    width: 80px;         /* ← スコア欄の幅を固定して安定化 */
+    box-sizing: border-box;
+}
