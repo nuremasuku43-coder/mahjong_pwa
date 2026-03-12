@@ -201,3 +201,13 @@ body.font-large { font-size: 20px; }
     color: #000;
 }
 
+.seat-select {
+    width: 60px;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.player-row {
+    align-items: center;
+}
+
