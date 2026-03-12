@@ -886,7 +886,15 @@ document.getElementById("rate-select").value = loadRate();
 // ===============================
 function updateRateUI() {
     const enabled = loadRateEnabled();
+
+    // select の有効 / 無効
     document.getElementById("rate-select").disabled = !enabled;
+
+    // 説明文の薄表示
+    const explain = document.querySelector(".rate-explain");
+    if (explain) {
+        explain.classList.toggle("rate-disabled", !enabled);
+    }
 }
 
 // 初期表示

@@ -270,3 +270,25 @@ input[name="score"] {
     border-radius: 50%;
 }
 
+.rate-explain {
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+.dark-mode .rate-explain {
+    color: #aaa;
+}
+
+.rate-example {
+    width: 100%;
+    max-width: 420px;
+    display: block;
+    margin: 8px auto 4px;
+    border-radius: 6px;
+}
+
+.rate-disabled {
+    opacity: 0.5;
+}
