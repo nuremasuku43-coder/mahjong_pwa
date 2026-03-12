@@ -511,7 +511,7 @@ document.querySelectorAll(".player-preset").forEach(btn => {
 });
 
 // ===============================
-//  プレイヤー名プリセット（保存・読み込み）
+//  プレイヤー名プリセット（保存・読み込み・削除）
 // ===============================
 function loadPlayerPresets() {
     const data = localStorage.getItem("player_presets");
@@ -521,6 +521,21 @@ function loadPlayerPresets() {
 function savePlayerPresets(presets) {
     localStorage.setItem("player_presets", JSON.stringify(presets));
 }
+function attachPresetDeleteHandlers() {
+    document.querySelectorAll(".preset-delete").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const idx = Number(btn.dataset.index);
+            const presets = loadPlayerPresets();
+
+            if (!confirm(`プリセット「${presets[idx].name}」を削除しますか？`)) return;
+
+            presets.splice(idx, 1);
+            savePlayerPresets(presets);
+            renderPlayerPresets();
+        });
+    });
+}
+
 
 // ===============================
 //  プリセットを画面に表示
@@ -532,15 +547,29 @@ function renderPlayerPresets() {
     area.innerHTML = "";
 
     presets.forEach((preset, idx) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "preset-item";
+
         const btn = document.createElement("button");
         btn.className = "btn-secondary player-preset";
         btn.textContent = preset.name;
         btn.dataset.names = preset.players.join(",");
-        area.appendChild(btn);
+
+        const del = document.createElement("button");
+        del.className = "preset-delete";
+        del.textContent = "×";
+        del.dataset.index = idx;
+        del.dataset.name = preset.name;
+
+        wrapper.appendChild(btn);
+        wrapper.appendChild(del);
+        area.appendChild(wrapper);
     });
 
     attachPlayerPresetHandlers();
+    attachPresetDeleteHandlers();
 }
+
 
 // ===============================
 //  プリセット適用

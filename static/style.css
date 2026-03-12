@@ -333,3 +333,22 @@ input[name="score"] {
     transform: translateY(0);
 }
 
+.preset-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.preset-delete {
+    background: none;
+    border: none;
+    color: #c62828;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.preset-delete:active {
+    transform: scale(0.9);
+}
+
