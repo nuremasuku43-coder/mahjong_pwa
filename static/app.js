@@ -55,6 +55,23 @@ function calcTopBonus(baseScore) {
     return bonus > 0 ? bonus : 0;
 }
 
+function updateFourthScore() {
+    const scoreInputs = document.querySelectorAll("input[name='score']");
+    const scores = [...scoreInputs].map(i => Number(i.value) || 0);
+
+    const filled = scores.filter(v => v !== 0).length;
+
+    if (filled >= 3) {
+        const total = 100000;
+        const sum3 = scores.reduce((a, b) => a + b, 0);
+        const fourth = total - sum3;
+
+        scoreInputs[3].value = fourth;
+
+        scoreInputs[3].dispatchEvent(new Event("input"));
+    }
+}
+
 // ===============================
 //  半荘を追加（返し点に完全対応）
 // ===============================
@@ -316,6 +333,11 @@ document.getElementById("save-settings").addEventListener("click", () => {
 
     saveSettings(uma, oka);
     alert("設定を保存しました");
+});
+
+// ★ スコア入力のリアルタイム監視
+document.querySelectorAll("input[name='score']").forEach(input => {
+    input.addEventListener("input", updateFourthScore);
 });
 
 // ===============================
