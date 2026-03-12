@@ -380,6 +380,12 @@ function applyFixedMode() {
             label.style.display = "inline-block";
         });
 
+        // ★ ここを追加（重要）
+        labels.forEach((label, idx) => {
+            const name = label.textContent.replace("：", "");
+            playerInputs[idx].value = name;
+        });
+
     } else {
         // 名前欄を表示
         playerInputs.forEach(input => {
@@ -392,6 +398,7 @@ function applyFixedMode() {
         });
     }
 }
+
 // 固定4人モードの ON/OFF を切り替えた瞬間に反映
 document.getElementById("fixed-mode").addEventListener("change", applyFixedMode);
 
