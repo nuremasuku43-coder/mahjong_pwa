@@ -153,6 +153,9 @@ function renderTotal() {
     const area = document.getElementById("total-table-area");
     const total = calcTotalPoints();
 
+    const rateEnabled = loadRateEnabled();
+    const rate = loadRate();
+
     if (total.length === 0) {
         area.innerHTML = "<p>まだ対局が登録されていません。</p>";
         return;
@@ -174,7 +177,10 @@ function renderTotal() {
             <tr>
                 <td>${idx + 1}</td>
                 <td>${item[0]}</td>
-                <td class="${ptClass}">${pt.toFixed(1)}</td>
+                <td class="${ptClass}">
+                    ${pt.toFixed(1)}
+                    ${rateEnabled ? `<br><small>${(pt * rate).toFixed(0)}</small>` : ""}
+                </td>
             </tr>
         `;
     });
@@ -182,6 +188,8 @@ function renderTotal() {
     html += "</tbody></table>";
     area.innerHTML = html;
 }
+
+
 
 // ===============================
 //  日付ごとの成績
@@ -585,6 +593,26 @@ document.getElementById("toggle-explain").addEventListener("click", () => {
     }
 });
 
+
+// ===============================
+//  レート設定の保存・読み込み
+// ===============================
+function loadRateEnabled() {
+    return localStorage.getItem("rate_enabled") === "true";
+}
+
+function saveRateEnabled(flag) {
+    localStorage.setItem("rate_enabled", flag);
+}
+
+function loadRate() {
+    return Number(localStorage.getItem("rate") || 100);
+}
+
+function saveRate(rate) {
+    localStorage.setItem("rate", rate);
+}
+
 // ===============================
 //  役一覧 折りたたみ
 // ===============================
@@ -850,6 +878,40 @@ renderDailyTotals();
 renderPlayerPresets();
 loadLastPlayers();
 applyFixedMode();
+document.getElementById("rate-enabled").checked = loadRateEnabled();
+document.getElementById("rate-select").value = loadRate();
+
+// ===============================
+//  レートUI制御（ON/OFFでselect無効化）
+// ===============================
+function updateRateUI() {
+    const enabled = loadRateEnabled();
+    document.getElementById("rate-select").disabled = !enabled;
+}
+
+// 初期表示
+updateRateUI();
+
+// ON/OFF切替時
+document.getElementById("rate-enabled").addEventListener("change", () => {
+    const enabled = document.getElementById("rate-enabled").checked;
+    saveRateEnabled(enabled);
+    updateRateUI();
+    renderTotal();
+});
+
+
+// ===============================
+//  テン5 / テンピン切替 → 即反映
+// ===============================
+document.getElementById("rate-select").addEventListener("change", () => {
+    const rate = Number(document.getElementById("rate-select").value);
+    saveRate(rate);
+
+    // 即反映
+    renderTotal();
+});
+
 
 // ===============================
 //  タブ切り替え
