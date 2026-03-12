@@ -313,6 +313,16 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 
     const players = Array.from(document.querySelectorAll("input[name='player']")).map(i => i.value);
     const scores = Array.from(document.querySelectorAll("input[name='score']")).map(i => Number(i.value));
+    // ★ 固定4人モードのときはラベルの名前を input と players[] に強制反映
+if (document.getElementById("fixed-mode").checked) {
+    const labels = document.querySelectorAll(".player-label");
+    const playerInputs = document.querySelectorAll("input[name='player']");
+    labels.forEach((label, idx) => {
+        const name = label.textContent.replace("：", "");
+        playerInputs[idx].value = name;
+        players[idx] = name;
+    });
+} 
 // ★ スコアが3人以上入力されているかチェック
 const nonEmptyScores = scores.filter(s => !isNaN(s) && s !== 0 && s !== "");
 if (nonEmptyScores.length < 3) {
@@ -320,24 +330,25 @@ if (nonEmptyScores.length < 3) {
     return;
 }
 
-    // ★ 4人目の自動計算（3人入力されていたら）
-    const filledScores = scores.filter(s => !isNaN(s) && s !== 0);
+// ★ 4人目の自動計算（3人入力されていたら）
+const filledScores = scores.filter(s => !isNaN(s) && s !== 0);
 
-    if (filledScores.length === 3) {
-        const total = 100000; // 4人麻雀の合計点
-        const sum3 = filledScores.reduce((a, b) => a + b, 0);
-        const lastScore = total - sum3;
+if (filledScores.length === 3) {
+    const total = 100000; // 4人麻雀の合計点
+    const sum3 = filledScores.reduce((a, b) => a + b, 0);
+    const lastScore = total - sum3;
 
-        // 4人目に自動入力
-        const scoreInputs = document.querySelectorAll("input[name='score']");
-        scoreInputs[3].value = lastScore;
-        scores[3] = lastScore;
+    // 4人目に自動入力
+    const scoreInputs = document.querySelectorAll("input[name='score']");
+    scoreInputs[3].value = lastScore;
+    scores[3] = lastScore;
+
     // ★ 自動計算された人の名前を補完
     const emptyIndex = scores.findIndex(s => isNaN(s) || s === 0);
     if (emptyIndex !== -1) {
         players[emptyIndex] = players[emptyIndex] || "（自動計算）";
     }
-    }
+} // ← ★★★ この1行が必要！
 
     addHanchan(players, scores);
 
