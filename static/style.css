@@ -221,3 +221,12 @@ body.font-large { font-size: 20px; }
     font-weight: bold;
 }
 
+.input-note {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+.dark-mode .input-note {
+    color: #aaa;
+}
+
