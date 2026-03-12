@@ -58,7 +58,7 @@ function calcTopBonus(baseScore) {
 // ===============================
 //  半荘を追加（返し点に完全対応）
 // ===============================
-function addHanchan(players, scores) {
+function addHanchan(players, scores, seats) {
     const settings = loadSettings();
     const UMA = settings.UMA;
     const BASE_SCORE = settings.BASE_SCORE;
@@ -68,8 +68,18 @@ function addHanchan(players, scores) {
     let history = loadHistory();
     const hanchanNo = history.length + 1;
 
-    const data = players.map((p, i) => ({ player: p, score: scores[i] }));
-    const sorted = data.sort((a, b) => b.score - a.score);
+    // ★ 座り順も含めてデータ化
+    const data = players.map((p, i) => ({
+        player: p,
+        score: scores[i],
+        seat: seats[i]   // ← 追加
+    }));
+
+    // ★ 点数 → 座り順 でソート
+    const sorted = data.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.seat - b.seat; // 同点なら座り順（東→南→西→北）
+    });
 
     const results = sorted.map((item, idx) => {
         let point = (item.score - BASE_SCORE) / 1000;
@@ -313,6 +323,9 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 
     const players = Array.from(document.querySelectorAll("input[name='player']")).map(i => i.value);
     const scores = Array.from(document.querySelectorAll("input[name='score']")).map(i => Number(i.value));
+    // ★ 座り順を取得
+    const seats = Array.from(document.querySelectorAll(".seat-select")).map(sel => Number(sel.value));
+
     // ★ 固定4人モードのときはラベルの名前を input と players[] に強制反映
 if (document.getElementById("fixed-mode").checked) {
     const labels = document.querySelectorAll(".player-label");
@@ -350,7 +363,7 @@ if (filledScores.length === 3) {
     }
 } // ← ★★★ この1行が必要！
 
-    addHanchan(players, scores);
+    addHanchan(players, scores, seats);
 
     localStorage.setItem("last_players", JSON.stringify(players));
 
