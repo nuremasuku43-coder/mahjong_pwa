@@ -711,6 +711,16 @@ document.getElementById("calc-score").addEventListener("click", () => {
     `;
 });
 
+document.getElementById("toggle-dark").addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+});
+
+// 初期読み込み
+if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark-mode");
+}
+
 
 
 // ===============================
@@ -722,3 +732,24 @@ renderDailyTotals();
 renderPlayerPresets();
 loadLastPlayers();
 applyFixedMode();
+
+// ===============================
+//  タブ切り替え
+// ===============================
+document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const tab = btn.dataset.tab;
+
+        // ボタンの見た目切り替え
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // コンテンツ切り替え
+        document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
+        document.getElementById(`tab-${tab}`).style.display = "block";
+    });
+});
+
+// 初期タブ
+document.querySelector(".tab-btn[data-tab='settings']").classList.add("active");
+

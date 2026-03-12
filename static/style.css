@@ -106,3 +106,123 @@ body.font-medium {
 body.font-large {
     font-size: 20px;
 }
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: #ddd;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.tab-btn.active {
+    background: #4CAF50;
+    color: white;
+}
+
+/* ▼ 画面下に固定するタブ（ボトムナビ） ▼ */
+.tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--tab-bg);
+    z-index: 999;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+/* タブボタン */
+.tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 6px 0;
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* 選択中のタブ */
+.tab-btn.active {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.icon {
+    font-size: 20px;
+    display: block;
+}
+
+/* ▼ ライトモード（デフォルト） ▼ */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #222;
+    --card-bg: #ffffff;
+    --border-color: #ccc;
+    --tab-bg: #f8f8f8;
+    --accent-color: #4CAF50;
+}
+
+/* ▼ ダークモード ▼ */
+.dark-mode {
+    --bg-color: #1e1e1e;
+    --text-color: #e5e5e5;
+    --card-bg: #2a2a2a;
+    --border-color: #444;
+    --tab-bg: #2a2a2a;
+    --accent-color: #81c784;
+}
+
+/* 全体に適用 */
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+/* カードの見た目を強化 */
+.card {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* タブのアニメーション */
+.tab-btn {
+    transition: color 0.2s, transform 0.2s;
+}
+
+.tab-btn.active {
+    transform: scale(1.05);
+}
+
+/* ボタンの見た目改善 */
+.btn-primary, .btn-secondary, .btn-danger {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 15px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-danger:hover {
+    transform: translateY(-2px);
+}
+

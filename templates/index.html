@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>麻雀スコア集計</title>
-    <meta name="viewport" 
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <link rel="manifest" href="static/manifest.json">
     <meta name="theme-color" content="#4CAF50">
@@ -20,96 +18,245 @@
     </script>
 </head>
 <body>
+
+<!-- ▼▼ タブボタン ▼▼ -->
+<div class="tabs">
+    <button class="tab-btn" data-tab="home">
+        <span class="icon">🏠</span><br>ホーム
+    </button>
+    <button class="tab-btn" data-tab="settings">
+        <span class="icon">⚙️</span><br>設定
+    </button>
+    <button class="tab-btn" data-tab="calc">
+        <span class="icon">🧮</span><br>計算
+    </button>
+    <button class="tab-btn" data-tab="guide">
+        <span class="icon">📘</span><br>解説
+    </button>
+</div>
 <div class="container">
     <h1>麻雀スコア集計</h1>
 
-    <!-- ▼▼ ウマ・オカ設定 ▼▼ -->
-    <section class="card">
-        <h2>ウマ・オカ設定</h2>
-        <div class="row">
-            <input id="uma-input" placeholder="ウマ（例: 20,10,-10,-20）" value="20,10,-10,-20">
-            <input id="oka-input" placeholder="オカ（例: 25000）" value="25000">
-        </div>
-        <button id="save-settings" class="btn-primary">設定を保存</button>
-    </section>
-<div class="preset-buttons">
-    <button class="btn-secondary preset" data-uma="20,10,-10,-20" data-oka="25000">一般（20-10）</button>
-    <button class="btn-secondary preset" data-uma="30,10,-10,-30" data-oka="30000">Mリーグ</button>
-    <button class="btn-secondary preset" data-uma="10,5,-5,-10" data-oka="25000">競技（10-5）</button>
-    <button class="btn-secondary preset" data-uma="15,5,-5,-15" data-oka="25000">東風戦</button>
-</div>
+    <!-- ===============================
+         ▼▼ ホームタブ ▼▼
+    =============================== -->
+    <div id="tab-home" class="tab-content">
 
+        <!-- 半荘入力 -->
+        <section class="card">
+            <h2>半荘入力</h2>
+            <form id="hanchan-form" class="form-grid">
+
+                <div class="row player-row">
+                    <span class="player-label"></span>
+                    <input name="player" placeholder="プレイヤー名" required>
+                    <input name="score" placeholder="最終持ち点" type="number" required>
+                </div>
+                <div class="row player-row">
+                    <span class="player-label"></span>
+                    <input name="player" placeholder="プレイヤー名" required>
+                    <input name="score" placeholder="最終持ち点" type="number" required>
+                </div>
+                <div class="row player-row">
+                    <span class="player-label"></span>
+                    <input name="player" placeholder="プレイヤー名" required>
+                    <input name="score" placeholder="最終持ち点" type="number" required>
+                </div>
+                <div class="row player-row">
+                    <span class="player-label"></span>
+                    <input name="player" placeholder="プレイヤー名" required>
+                    <input name="score" placeholder="最終持ち点" type="number" required>
+                </div>
+
+                <button type="submit" class="btn-primary">この半荘を登録</button>
+            </form>
+        </section>
+
+        <!-- トータル成績 -->
+        <section class="card">
+            <h2>トータル成績</h2>
+            <div id="total-table-area">
+                <p>まだ対局が登録されていません。</p>
+            </div>
+        </section>
+
+        <!-- 日付ごとの成績 -->
+        <section class="card">
+            <h2>日付ごとの成績</h2>
+            <div id="daily-total-area">
+                <p>まだデータがありません。</p>
+            </div>
+        </section>
+
+        <!-- 半荘履歴 -->
+        <section class="card">
+            <h2>半荘履歴</h2>
+            <div id="history-area">
+                <p>履歴はまだありません。</p>
+            </div>
+        </section>
+
+        <!-- データ管理 -->
+        <section class="card">
+            <h2>データ管理</h2>
+            <button id="reset-btn" class="btn-danger">全データをリセット</button>
+        </section>
+
+    </div>
+
+
+    <!-- ===============================
+         ▼▼ 設定タブ ▼▼
+    =============================== -->
+    <div id="tab-settings" class="tab-content" style="display:none;">
+
+        <!-- ウマ・オカ設定 -->
+        <section class="card">
+            <h2>ウマ・オカ設定</h2>
+            <div class="row">
+                <input id="uma-input" placeholder="ウマ（例: 20,10,-10,-20）" value="20,10,-10,-20">
+                <input id="oka-input" placeholder="オカ（例: 25000）" value="25000">
+            </div>
+            <button id="save-settings" class="btn-primary">設定を保存</button>
+        </section>
+
+        <div class="preset-buttons">
+            <button class="btn-secondary preset" data-uma="20,10,-10,-20" data-oka="25000">一般（20-10）</button>
+            <button class="btn-secondary preset" data-uma="30,10,-10,-30" data-oka="30000">Mリーグ</button>
+            <button class="btn-secondary preset" data-uma="10,5,-5,-10" data-oka="25000">競技（10-5）</button>
+            <button class="btn-secondary preset" data-uma="15,5,-5,-15" data-oka="25000">東風戦</button>
+        </div>
+
+        <!-- 固定4人モード -->
+        <section class="card">
+            <h2>固定4人モード</h2>
+            <label style="display:flex; align-items:center; gap:10px;">
+                <input type="checkbox" id="fixed-mode">
+                固定4人でプレイする（名前入力欄を非表示にする）
+            </label>
+        </section>
+
+        <!-- プレイヤー名プリセット -->
+        <section class="card">
+            <h2>プレイヤー名プリセット</h2>
+
+            <div class="preset-player-buttons" id="player-preset-area"></div>
+
+            <h3>プリセットを追加</h3>
+            <div class="row">
+                <input id="preset-name" placeholder="プリセット名（例：固定メンバーA）">
+            </div>
+            <div class="row">
+                <input id="preset-player1" placeholder="プレイヤー1">
+                <input id="preset-player2" placeholder="プレイヤー2">
+            </div>
+            <div class="row">
+                <input id="preset-player3" placeholder="プレイヤー3">
+                <input id="preset-player4" placeholder="プレイヤー4">
+            </div>
+
+            <button id="add-player-preset" class="btn-primary">プリセットを追加</button>
+        </section>
+
+        <!-- 文字サイズ -->
+        <section class="card">
+            <h2>文字サイズ</h2>
+            <div class="row">
+                <button class="btn-secondary font-btn" data-size="small">小</button>
+                <button class="btn-secondary font-btn" data-size="medium">中</button>
+                <button class="btn-secondary font-btn" data-size="large">大</button>
+            </div>
+        </section>
 <section class="card">
-    <h2>固定4人モード</h2>
-    <label style="display:flex; align-items:center; gap:10px;">
-        <input type="checkbox" id="fixed-mode">
-        固定4人でプレイする（名前入力欄を非表示にする）
-    </label>
+    <h2>テーマ</h2>
+    <button id="toggle-dark" class="btn-secondary">ダークモード切替</button>
 </section>
 
-<section class="card">
-    <h2>プレイヤー名プリセット</h2>
-
-    <div class="preset-player-buttons" id="player-preset-area">
-        <!-- ここにプリセットボタンが自動で追加される -->
     </div>
 
-    <h3>プリセットを追加</h3>
-    <div class="row">
-        <input id="preset-name" placeholder="プリセット名（例：固定メンバーA）">
-    </div>
-    <div class="row">
-        <input id="preset-player1" placeholder="プレイヤー1">
-        <input id="preset-player2" placeholder="プレイヤー2">
-    </div>
-    <div class="row">
-        <input id="preset-player3" placeholder="プレイヤー3">
-        <input id="preset-player4" placeholder="プレイヤー4">
-    </div>
 
-    <button id="add-player-preset" class="btn-primary">プリセットを追加</button>
+    <!-- ===============================
+         ▼▼ 計算タブ ▼▼
+    =============================== -->
+    <div id="tab-calc" class="tab-content" style="display:none;">
+
+        <!-- 符計算ツール -->
+       <section class="card">
+    <h2 id="toggle-fu" style="cursor:pointer;">
+        ▼ 符計算ツール（クリックで開く）
+    </h2>
+
+    <div id="fu-tool" style="display:none; margin-top:10px;">
+
+        <label>
+            <input type="checkbox" id="menzen"> 門前（鳴いていない）
+        </label><br>
+
+        <label>
+            <input type="checkbox" id="naki"> 鳴いている（副露）
+        </label><br>
+
+        <label>
+            <input type="checkbox" id="tsumo"> ツモ和了
+        </label>
+
+        <h3>待ちの種類</h3>
+        <select id="machi">
+            <option value="0">両面（0符）</option>
+            <option value="2">カンチャン（+2符）</option>
+            <option value="2p">ペンチャン（+2符）</option>
+            <option value="2t">単騎（+2符）</option>
+        </select>
+
+        <h3>雀頭（頭）</h3>
+        <select id="atama">
+            <option value="0">一般牌（0符）</option>
+            <option value="2">役牌（白・發・中）(+2符)</option>
+            <option value="2w">自風・場風 (+2符)</option>
+        </select>
+
+        <h3>面子（刻子・槓子）</h3>
+
+        <div id="mentsu-list"></div>
+
+        <button id="add-mentsu" class="btn-secondary" style="margin-top:10px;">
+            面子を追加
+        </button>
+
+        <button id="calc-fu" class="btn-primary" style="margin-top:10px;">
+            符を計算する
+        </button>
+
+        <div id="fu-result" style="margin-top:10px; font-weight:bold;"></div>
+    </div>
 </section>
 
 
+        <!-- 点数計算ツール -->
+        <section class="card">
+    <h2>点数計算ツール（符計算）</h2>
 
-    <!-- ▼▼ 半荘入力 ▼▼ -->
-    <section class="card">
-        <h2>半荘入力</h2>
-        <form id="hanchan-form" class="form-grid">
-<div class="row player-row">
-    <span class="player-label"></span>
-    <input name="player" placeholder="プレイヤー名" required>
-    <input name="score" placeholder="最終持ち点" type="number" required>
-</div>
-<div class="row player-row">
-    <span class="player-label"></span>
-    <input name="player" placeholder="プレイヤー名" required>
-    <input name="score" placeholder="最終持ち点" type="number" required>
-</div>
-<div class="row player-row">
-    <span class="player-label"></span>
-    <input name="player" placeholder="プレイヤー名" required>
-    <input name="score" placeholder="最終持ち点" type="number" required>
-</div>
-<div class="row player-row">
-    <span class="player-label"></span>
-    <input name="player" placeholder="プレイヤー名" required>
-    <input name="score" placeholder="最終持ち点" type="number" required>
-</div>
+    <div class="row">
+        <input id="fu-input" type="number" placeholder="符（例：30）">
+        <input id="han-input" type="number" placeholder="翻（例：3）">
+    </div>
 
-            <button type="submit" class="btn-primary">この半荘を登録</button>
-        </form>
-    </section>
+    <button id="calc-score" class="btn-primary">点数を計算する</button>
 
-    <!-- ▼▼ トータル成績 ▼▼ -->
-    <section class="card">
-        <h2>トータル成績</h2>
-        <div id="total-table-area">
-            <p>まだ対局が登録されていません。</p>
-        </div>
-    </section>
+    <div id="score-result" style="margin-top:10px; font-weight:bold;"></div>
+</section>
 
-<section class="card">
+
+    </div>
+
+
+    <!-- ===============================
+         ▼▼ 解説タブ ▼▼
+    =============================== -->
+    <div id="tab-guide" class="tab-content" style="display:none;">
+
+        <!-- ウマ・オカ説明 -->
+        <section class="card">
     <h2 id="toggle-explain" style="cursor:pointer;">
         ▼ ウマ・オカの説明（クリックで開く）
     </h2>
@@ -165,96 +312,8 @@
     </div>
 </section>
 
-
-    <!-- ▼▼ 日付ごとの成績 ▼▼ -->
-    <section class="card">
-        <h2>日付ごとの成績</h2>
-        <div id="daily-total-area">
-            <p>まだデータがありません。</p>
-        </div>
-    </section>
-
-    <!-- ▼▼ 半荘履歴 ▼▼ -->
-    <section class="card">
-        <h2>半荘履歴</h2>
-        <div id="history-area">
-            <p>履歴はまだありません。</p>
-        </div>
-    </section>
-
-    <!-- ▼▼ データ管理 ▼▼ -->
-    <section class="card">
-        <h2>データ管理</h2>
-        <button id="reset-btn" class="btn-danger">全データをリセット</button>
-    </section>
-
-</div>
-
-<section class="card">
-    <h2 id="toggle-fu" style="cursor:pointer;">
-        ▼ 符計算ツール（クリックで開く）
-    </h2>
-
-    <div id="fu-tool" style="display:none; margin-top:10px;">
-
-        <label>
-            <input type="checkbox" id="menzen"> 門前（リーチ・ツモなど）
-        </label><br>
-
-        <label>
-            <input type="checkbox" id="naki"> 鳴いている（副露）
-        </label><br>
-
-        <label>
-            <input type="checkbox" id="tsumo"> ツモ和了
-        </label>
-
-        <h3>待ちの種類</h3>
-        <select id="machi">
-            <option value="0">両面（0符）</option>
-            <option value="2">カンチャン（+2符）</option>
-            <option value="2p">ペンチャン（+2符）</option>
-            <option value="2t">単騎（+2符）</option>
-        </select>
-
-        <h3>雀頭（頭）</h3>
-        <select id="atama">
-            <option value="0">一般牌（0符）</option>
-            <option value="2">役牌（白・發・中）(+2符)</option>
-            <option value="2w">自風・場風 (+2符)</option>
-        </select>
-
-<h3>面子（刻子・槓子）</h3>
-
-<div id="mentsu-list"></div>
-
-<button id="add-mentsu" class="btn-secondary" style="margin-top:10px;">
-    面子を追加
-</button>
-
-        <button id="calc-fu" class="btn-primary" style="margin-top:10px;">
-            符を計算する
-        </button>
-
-        <div id="fu-result" style="margin-top:10px; font-weight:bold;"></div>
-    </div>
-</section>
-
-
-<section class="card">
-    <h2>点数計算ツール（符計算）</h2>
-
-    <div class="row">
-        <input id="fu-input" type="number" placeholder="符（例：30）">
-        <input id="han-input" type="number" placeholder="翻（例：3）">
-    </div>
-
-    <button id="calc-score" class="btn-primary">点数を計算する</button>
-
-    <div id="score-result" style="margin-top:10px; font-weight:bold;"></div>
-</section>
-
-<section class="card">
+        <!-- 役一覧 -->
+        <section class="card">
     <h2 id="toggle-yaku" style="cursor:pointer;">
         ▼ 役一覧・翻数（クリックで開く）
     </h2>
@@ -310,16 +369,28 @@
     </div>
 </section>
 
-<section class="card">
-    <h2>文字サイズ</h2>
-    <div class="row">
-        <button class="btn-secondary font-btn" data-size="small">小</button>
-        <button class="btn-secondary font-btn" data-size="medium">中</button>
-        <button class="btn-secondary font-btn" data-size="large">大</button>
     </div>
-</section>
 
+</div>
 
 <script src="static/app.js"></script>
+
+<!-- ▼▼ タブ切り替えスクリプト ▼▼ -->
+<script>
+document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const tab = btn.dataset.tab;
+
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
+        document.getElementById(`tab-${tab}`).style.display = "block";
+    });
+});
+
+document.querySelector(".tab-btn[data-tab='home']").classList.add("active");
+</script>
+
 </body>
 </html>
