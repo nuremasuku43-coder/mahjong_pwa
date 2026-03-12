@@ -184,3 +184,20 @@ th, td {
 body.font-small { font-size: 14px; }
 body.font-medium { font-size: 16px; }
 body.font-large { font-size: 20px; }
+
+/* =========================================
+   ⑫ 説明ボックス（常に黒文字）
+   ========================================= */
+.explain-box {
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 6px;
+    color: #000; /* ← 常に黒文字 */
+    white-space: pre-wrap;
+}
+
+.dark-mode .explain-box {
+    background: #e0e0e0; /* ← ダークでも黒文字が見える背景 */
+    color: #000;
+}
+
