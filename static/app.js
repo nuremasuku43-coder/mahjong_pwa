@@ -313,6 +313,13 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 
     const players = Array.from(document.querySelectorAll("input[name='player']")).map(i => i.value);
     const scores = Array.from(document.querySelectorAll("input[name='score']")).map(i => Number(i.value));
+// ★ スコアが3人以上入力されているかチェック
+const nonEmptyScores = scores.filter(s => !isNaN(s) && s !== 0 && s !== "");
+if (nonEmptyScores.length < 3) {
+    alert("スコアは3人以上入力してください。");
+    return;
+}
+
     // ★ 4人目の自動計算（3人入力されていたら）
     const filledScores = scores.filter(s => !isNaN(s) && s !== 0);
 
