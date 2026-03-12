@@ -236,3 +236,37 @@ input[name="score"] {
     width: 80px;         /* ← スコア欄の幅を固定して安定化 */
     box-sizing: border-box;
 }
+
+.tab-btn {
+    transition:
+        color 0.2s ease,
+        transform 0.15s ease,
+        background-color 0.2s ease;
+}
+
+.tab-btn:active {
+    transform: scale(0.95);
+}
+
+.tab-btn.active {
+    color: var(--accent-color);
+    transform: scale(1.08);
+    font-weight: bold;
+}
+
+.tab-btn.active {
+    position: relative;
+}
+
+.tab-btn.active::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--accent-color);
+    border-radius: 50%;
+}
+
