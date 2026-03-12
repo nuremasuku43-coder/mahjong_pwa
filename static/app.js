@@ -332,6 +332,11 @@ if (nonEmptyScores.length < 3) {
         const scoreInputs = document.querySelectorAll("input[name='score']");
         scoreInputs[3].value = lastScore;
         scores[3] = lastScore;
+    // ★ 自動計算された人の名前を補完
+    const emptyIndex = scores.findIndex(s => isNaN(s) || s === 0);
+    if (emptyIndex !== -1) {
+        players[emptyIndex] = players[emptyIndex] || "（自動計算）";
+    }
     }
 
     addHanchan(players, scores);
