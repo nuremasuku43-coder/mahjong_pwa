@@ -225,4 +225,24 @@ body {
 .btn-danger:hover {
     transform: translateY(-2px);
 }
+/* タブが隠れないように下に余白を作る */
+.container {
+    padding-bottom: 90px; /* タブの高さ + 余白 */
+}
+
+/* ▼ テーマカラー（デフォルト：緑） ▼ */
+:root {
+    --accent-color: #4CAF50;
+}
+
+/* 青テーマ */
+.theme-blue {
+    --accent-color: #2196F3;
+}
+
+/* 赤テーマ */
+.theme-red {
+    --accent-color: #E53935;
+}
+
 

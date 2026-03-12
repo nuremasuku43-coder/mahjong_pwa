@@ -720,6 +720,37 @@ document.getElementById("toggle-dark").addEventListener("click", () => {
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark-mode");
 }
+// ===============================
+//  テーマカラー変更（緑・青・赤）
+// ===============================
+document.querySelectorAll(".theme-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const theme = btn.dataset.theme;
+
+        // 既存テーマを削除
+        document.body.classList.remove("theme-blue", "theme-red");
+
+        // 新テーマを適用
+        if (theme === "blue") {
+            document.body.classList.add("theme-blue");
+        } else if (theme === "red") {
+            document.body.classList.add("theme-red");
+        }
+
+        // 保存
+        localStorage.setItem("themeColor", theme);
+    });
+});
+
+// 初期読み込み
+const savedTheme = localStorage.getItem("themeColor");
+if (savedTheme === "blue") {
+    document.body.classList.add("theme-blue");
+}
+if (savedTheme === "red") {
+    document.body.classList.add("theme-red");
+}
+
 
 
 
