@@ -175,20 +175,20 @@ body.font-large {
 
 /* ▼ ダークモード（白ボケしないプロ仕様） ▼ */
 .dark-mode {
-    --bg-color: #121212;        /* もっと黒に近い */
-    --text-color: #d0d0d0;      /* 真っ白ではなく少し落とす */
-    --card-bg: #1a1a1a;         /* 背景との差を小さく */
-    --border-color: #2a2a2a;    /* 目立たない境界線 */
-    --tab-bg: #181818;          /* タブも暗めに */
-    --accent-color: #81c784;    /* 緑はそのままでもOK */
+    --bg-color: #121212;
+    --text-color: #d0d0d0;
+    --card-bg: #1a1a1a;
+    --border-color: #2a2a2a;
+    --tab-bg: #181818;
+    --accent-color: #81c784;
 }
-
 
 /* 全体に適用 */
 body {
     background: var(--bg-color);
     color: var(--text-color);
 }
+
 
 .dark-mode .card {
     box-shadow: 0 1px 4px rgba(0,0,0,0.4);
@@ -250,9 +250,7 @@ body {
 }
 
 /* ▼ テーマカラー（デフォルト：緑） ▼ */
-:root {
-    --accent-color: #4CAF50;
-}
+
 
 /* 青テーマ */
 .theme-blue {
