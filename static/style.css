@@ -173,15 +173,16 @@ body.font-large {
     --accent-color: #4CAF50;
 }
 
-/* ▼ ダークモード ▼ */
+/* ▼ ダークモード（白ボケしないプロ仕様） ▼ */
 .dark-mode {
-    --bg-color: #1e1e1e;
-    --text-color: #e5e5e5;
-    --card-bg: #2a2a2a;
-    --border-color: #444;
-    --tab-bg: #2a2a2a;
-    --accent-color: #81c784;
+    --bg-color: #121212;        /* もっと黒に近い */
+    --text-color: #d0d0d0;      /* 真っ白ではなく少し落とす */
+    --card-bg: #1a1a1a;         /* 背景との差を小さく */
+    --border-color: #2a2a2a;    /* 目立たない境界線 */
+    --tab-bg: #181818;          /* タブも暗めに */
+    --accent-color: #81c784;    /* 緑はそのままでもOK */
 }
+
 
 /* 全体に適用 */
 body {
@@ -189,9 +190,23 @@ body {
     color: var(--text-color);
 }
 
+.dark-mode .card {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
 .card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
+}
+
+/* ★ ここに追記してOK（ダークモード時のアクティブタブ強調） */
+.dark-mode .tab-btn.active {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.dark-mode .tab-btn.active {
+    transform: scale(1.08);
 }
 
 /* カードの見た目を強化 */
