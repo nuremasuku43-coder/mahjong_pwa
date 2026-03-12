@@ -198,6 +198,10 @@ body {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
 }
+/* ライトモードのカードは黒文字に固定 */
+:root .card {
+    color: #222;
+}
 
 /* ★ ここに追記してOK（ダークモード時のアクティブタブ強調） */
 .dark-mode .tab-btn.active {
