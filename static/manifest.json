@@ -2,7 +2,9 @@
   "name": "麻雀スコア集計",
   "short_name": "麻雀集計",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",
   "icons": [

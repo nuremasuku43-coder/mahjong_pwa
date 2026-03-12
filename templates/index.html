@@ -398,5 +398,29 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 document.querySelector(".tab-btn[data-tab='home']").classList.add("active");
 </script>
 
+<!-- ▼▼ Service Worker 登録 ▼▼ -->
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register(
+        "{{ url_for('static', filename='service-worker.js') }}"
+    );
+}
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register(
+        "{{ url_for('static', filename='service-worker.js') }}"
+    );
+
+    // ★ SW からのメッセージを受け取る
+    navigator.serviceWorker.addEventListener("message", event => {
+        if (event.data.type === "UPDATE_AVAILABLE") {
+            alert("新しいバージョンがあります。画面をリロードしてください。");
+        }
+    });
+}
+</script>
+
 </body>
 </html>
