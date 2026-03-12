@@ -47,12 +47,23 @@ function saveHistory(history) {
 }
 
 // ===============================
-//  半荘を追加
+//  トップ賞（返し点から自動計算）
+// ===============================
+function calcTopBonus(baseScore) {
+    // (返し点 - 25000) × 4人分 ÷ 1000点
+    const bonus = ((baseScore - 25000) * 4) / 1000;
+    return bonus > 0 ? bonus : 0;
+}
+
+// ===============================
+//  半荘を追加（返し点に完全対応）
 // ===============================
 function addHanchan(players, scores) {
     const settings = loadSettings();
     const UMA = settings.UMA;
     const BASE_SCORE = settings.BASE_SCORE;
+
+    const TOP_BONUS = calcTopBonus(BASE_SCORE);
 
     let history = loadHistory();
     const hanchanNo = history.length + 1;
@@ -61,7 +72,16 @@ function addHanchan(players, scores) {
     const sorted = data.sort((a, b) => b.score - a.score);
 
     const results = sorted.map((item, idx) => {
-        const point = (item.score - BASE_SCORE) / 1000 + UMA[idx];
+        let point = (item.score - BASE_SCORE) / 1000;
+
+        // ウマ
+        point += UMA[idx];
+
+        // トップ賞（返し点に応じて自動決定）
+        if (idx === 0) {
+            point += TOP_BONUS;
+        }
+
         return {
             rank: idx + 1,
             player: item.player,
