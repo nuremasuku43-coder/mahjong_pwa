@@ -313,6 +313,19 @@ document.getElementById("hanchan-form").addEventListener("submit", function(e) {
 
     const players = Array.from(document.querySelectorAll("input[name='player']")).map(i => i.value);
     const scores = Array.from(document.querySelectorAll("input[name='score']")).map(i => Number(i.value));
+    // ★ 4人目の自動計算（3人入力されていたら）
+    const filledScores = scores.filter(s => !isNaN(s) && s !== 0);
+
+    if (filledScores.length === 3) {
+        const total = 100000; // 4人麻雀の合計点
+        const sum3 = filledScores.reduce((a, b) => a + b, 0);
+        const lastScore = total - sum3;
+
+        // 4人目に自動入力
+        const scoreInputs = document.querySelectorAll("input[name='score']");
+        scoreInputs[3].value = lastScore;
+        scores[3] = lastScore;
+    }
 
     addHanchan(players, scores);
 
