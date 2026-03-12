@@ -141,14 +141,14 @@ th, td {
     z-index: 999;
     display: flex;
     justify-content: space-around;
-    padding: 8px 0;
+    padding: 14px 0 10px;
     border-top: 1px solid var(--border-color);
 }
 
 .tab-btn {
     flex: 1;
     text-align: center;
-    padding: 6px 0;
+    padding: 10px 0;
     background: none;
     border: none;
     font-size: 14px;
@@ -291,4 +291,11 @@ input[name="score"] {
 
 .rate-disabled {
     opacity: 0.5;
+}
+
+.tabs {
+    box-shadow: 0 -6px 16px rgba(0,0,0,0.15);
+}
+.dark-mode .tabs {
+    box-shadow: 0 -6px 20px rgba(0,0,0,0.6);
 }
