@@ -59,7 +59,9 @@ function updateFourthScore() {
     const scoreInputs = document.querySelectorAll("input[name='score']");
     const scores = [...scoreInputs].map(i => Number(i.value) || 0);
 
-    const filled = scores.filter(v => v !== 0).length;
+    const scoreInputs = document.querySelectorAll("input[name='score']");
+    const filled = [...scoreInputs].filter(i => i.value.trim() !== "").length;
+
 
     if (filled >= 3) {
         const total = 100000;
@@ -362,14 +364,19 @@ if (document.getElementById("fixed-mode").checked) {
     });
 } 
 // ★ スコアが3人以上入力されているかチェック
-const nonEmptyScores = scores.filter(s => !isNaN(s) && s !== 0 && s !== "");
+const scoreInputs = document.querySelectorAll("input[name='score']");
+const nonEmptyScores = [...scoreInputs].filter(i => i.value.trim() !== "");
 if (nonEmptyScores.length < 3) {
     alert("スコアは3人以上入力してください。");
     return;
 }
 
 // ★ 4人目の自動計算（3人入力されていたら）
-const filledScores = scores.filter(s => !isNaN(s) && s !== 0);
+const scoreInputs = document.querySelectorAll("input[name='score']");
+const filledScores = [...scoreInputs]
+    .map(i => i.value.trim())
+    .filter(v => v !== "")
+    .map(Number);
 
 if (filledScores.length === 3) {
     const total = 100000; // 4人麻雀の合計点
