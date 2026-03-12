@@ -890,10 +890,16 @@ function updateRateUI() {
     // select の有効 / 無効
     document.getElementById("rate-select").disabled = !enabled;
 
-    // 説明文の薄表示
+    // 説明文を薄く
     const explain = document.querySelector(".rate-explain");
     if (explain) {
         explain.classList.toggle("rate-disabled", !enabled);
+    }
+
+    // 画像も薄く
+    const image = document.querySelector(".rate-example");
+    if (image) {
+        image.classList.toggle("rate-disabled", !enabled);
     }
 }
 
