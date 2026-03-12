@@ -367,6 +367,9 @@ function applyFixedMode() {
         });
     }
 }
+// 固定4人モードの ON/OFF を切り替えた瞬間に反映
+document.getElementById("fixed-mode").addEventListener("change", applyFixedMode);
+
 
 
 // ===============================
@@ -778,9 +781,13 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
         // コンテンツ切り替え
         document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
         document.getElementById(`tab-${tab}`).style.display = "block";
+
+        // ★ 固定4人モードをタブ切り替え時にも再適用
+        applyFixedMode();
     });
 });
 
 // 初期タブ
 document.querySelector(".tab-btn[data-tab='settings']").classList.add("active");
+
 
