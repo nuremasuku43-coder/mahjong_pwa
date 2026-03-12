@@ -149,7 +149,22 @@ function calcTotalPoints() {
     return Object.entries(total).sort((a, b) => b[1] - a[1]);
 }
 
+function getLastDiff() {
+    const history = loadHistory();
+    if (history.length === 0) return {};
+
+    const last = history[history.length - 1];
+    const diff = {};
+
+    last.results.forEach(r => {
+        diff[r.player] = r.point;
+    });
+
+    return diff;
+}
+
 function renderTotal() {
+    const lastDiff = getLastDiff();
     const area = document.getElementById("total-table-area");
     const total = calcTotalPoints();
 
@@ -172,24 +187,39 @@ function renderTotal() {
     total.forEach((item, idx) => {
         const pt = item[1];
         const ptClass = pt >= 0 ? "total-positive" : "total-negative";
+const diff = lastDiff[item[0]];
+let diffHtml = "";
+
+if (diff !== undefined) {
+    const cls = diff >= 0 ? "diff-up" : "diff-down";
+    const sign = diff >= 0 ? "+" : "";
+    diffHtml = `<br><span class="${cls}">${sign}${diff.toFixed(1)}</span>`;
+}
+
 
         html += `
             <tr>
                 <td>${idx + 1}</td>
                 <td>${item[0]}</td>
                 <td class="${ptClass}">
-                    ${pt.toFixed(1)}
-                    ${rateEnabled ? `<br><small>${(pt * rate).toFixed(0)}</small>` : ""}
-                </td>
+    ${pt.toFixed(1)}
+    ${rateEnabled ? `<br><small>${(pt * rate).toFixed(0)}</small>` : ""}
+    ${diffHtml}
+</td>
             </tr>
         `;
     });
 
     html += "</tbody></table>";
     area.innerHTML = html;
+
+setTimeout(() => {
+    document
+      .querySelectorAll("#total-table-area tbody tr")
+      .forEach(tr => tr.classList.add("row-loaded"));
+}, 20);
+
 }
-
-
 
 // ===============================
 //  日付ごとの成績

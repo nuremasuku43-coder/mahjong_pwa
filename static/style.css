@@ -299,3 +299,37 @@ input[name="score"] {
 .dark-mode .tabs {
     box-shadow: 0 -6px 20px rgba(0,0,0,0.6);
 }
+
+.diff-up {
+    color: #2e7d32;
+    font-size: 12px;
+}
+
+.diff-down {
+    color: #c62828;
+    font-size: 12px;
+}
+
+.diff-up::before {
+    content: "▲ ";
+    font-size: 11px;
+}
+
+.diff-down::before {
+    content: "▼ ";
+    font-size: 11px;
+}
+
+.diff-up,
+.diff-down {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.row-loaded .diff-up,
+.row-loaded .diff-down {
+    opacity: 1;
+    transform: translateY(0);
+}
+
