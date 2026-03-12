@@ -211,3 +211,13 @@ body.font-large { font-size: 20px; }
     align-items: center;
 }
 
+.total-positive {
+    color: #2e7d32; /* 濃い緑 */
+    font-weight: bold;
+}
+
+.total-negative {
+    color: #c62828; /* 濃い赤 */
+    font-weight: bold;
+}
+

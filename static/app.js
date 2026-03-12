@@ -144,11 +144,14 @@ function renderTotal() {
     `;
 
     total.forEach((item, idx) => {
+        const pt = item[1];
+        const ptClass = pt >= 0 ? "total-positive" : "total-negative";
+
         html += `
             <tr>
                 <td>${idx + 1}</td>
                 <td>${item[0]}</td>
-                <td>${item[1].toFixed(1)}</td>
+                <td class="${ptClass}">${pt.toFixed(1)}</td>
             </tr>
         `;
     });
