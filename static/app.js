@@ -57,21 +57,25 @@ function calcTopBonus(baseScore) {
 
 function updateFourthScore() {
     const scoreInputs = document.querySelectorAll("input[name='score']");
-    const scores = [...scoreInputs].map(i => Number(i.value) || 0);
 
-    const scoreInputs = document.querySelectorAll("input[name='score']");
-    const filled = [...scoreInputs].filter(i => i.value.trim() !== "").length;
+    const values = [...scoreInputs].map(i => {
+        const v = i.value.trim();
+        return v === "" ? null : Number(v);
+    });
 
+    const filledIndexes = values
+        .map((v, idx) => v !== null ? idx : null)
+        .filter(idx => idx !== null);
 
-    if (filled >= 3) {
-        const total = 100000;
-        const sum3 = scores.reduce((a, b) => a + b, 0);
-        const fourth = total - sum3;
+    if (filledIndexes.length !== 3) return;
 
-        scoreInputs[3].value = fourth;
+    const total = 100000;
+    const sum3 = filledIndexes.reduce((a, idx) => a + values[idx], 0);
+    const missingIndex = [0, 1, 2, 3].find(i => !filledIndexes.includes(i));
 
-        scoreInputs[3].dispatchEvent(new Event("input"));
-    }
+    const fourth = total - sum3;
+    scoreInputs[missingIndex].value = fourth;
+    scoreInputs[missingIndex].dispatchEvent(new Event("input"));
 }
 
 // ===============================
@@ -338,9 +342,9 @@ document.getElementById("save-settings").addEventListener("click", () => {
 });
 
 // ★ スコア入力のリアルタイム監視
-document.querySelectorAll("input[name='score']").forEach(input => {
-    input.addEventListener("input", updateFourthScore);
-});
+// document.querySelectorAll("input[name='score']").forEach(input => {
+//     input.addEventListener("input", updateFourthScore);
+// });
 
 // ===============================
 //  半荘入力フォーム
@@ -348,52 +352,44 @@ document.querySelectorAll("input[name='score']").forEach(input => {
 document.getElementById("hanchan-form").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const players = Array.from(document.querySelectorAll("input[name='player']")).map(i => i.value);
-    const scores = Array.from(document.querySelectorAll("input[name='score']")).map(i => Number(i.value));
-    // ★ 座り順を取得
+    const playerInputs = document.querySelectorAll("input[name='player']");
+    const scoreInputs  = document.querySelectorAll("input[name='score']");
+
+    let players = [...playerInputs].map(i => i.value);
+    let scores = [...scoreInputs].map(i => {
+        const v = i.value.trim();
+        return v === "" ? null : Number(v);
+    });
+
     const seats = Array.from(document.querySelectorAll(".seat-select")).map(sel => Number(sel.value));
 
-    // ★ 固定4人モードのときはラベルの名前を input と players[] に強制反映
-if (document.getElementById("fixed-mode").checked) {
-    const labels = document.querySelectorAll(".player-label");
-    const playerInputs = document.querySelectorAll("input[name='player']");
-    labels.forEach((label, idx) => {
-        const name = label.textContent.replace("：", "");
-        playerInputs[idx].value = name;
-        players[idx] = name;
-    });
-} 
-// ★ スコアが3人以上入力されているかチェック
-const scoreInputs = document.querySelectorAll("input[name='score']");
-const nonEmptyScores = [...scoreInputs].filter(i => i.value.trim() !== "");
-if (nonEmptyScores.length < 3) {
-    alert("スコアは3人以上入力してください。");
-    return;
-}
-
-// ★ 4人目の自動計算（3人入力されていたら）
-const scoreInputs = document.querySelectorAll("input[name='score']");
-const filledScores = [...scoreInputs]
-    .map(i => i.value.trim())
-    .filter(v => v !== "")
-    .map(Number);
-
-if (filledScores.length === 3) {
-    const total = 100000; // 4人麻雀の合計点
-    const sum3 = filledScores.reduce((a, b) => a + b, 0);
-    const lastScore = total - sum3;
-
-    // 4人目に自動入力
-    const scoreInputs = document.querySelectorAll("input[name='score']");
-    scoreInputs[3].value = lastScore;
-    scores[3] = lastScore;
-
-    // ★ 自動計算された人の名前を補完
-    const emptyIndex = scores.findIndex(s => isNaN(s) || s === 0);
-    if (emptyIndex !== -1) {
-        players[emptyIndex] = players[emptyIndex] || "（自動計算）";
+    // 固定4人モード
+    if (document.getElementById("fixed-mode").checked) {
+        const labels = document.querySelectorAll(".player-label");
+        labels.forEach((label, idx) => {
+            const name = label.textContent.replace("：", "");
+            players[idx] = name;
+            playerInputs[idx].value = name;
+        });
     }
-} // ← ★★★ この1行が必要！
+
+    const filledIndexes = scores
+        .map((v, idx) => v !== null ? idx : null)
+        .filter(idx => idx !== null);
+
+    if (filledIndexes.length < 3) {
+        alert("スコアは3人以上入力してください。");
+        return;
+    }
+
+    if (filledIndexes.length === 3) {
+        const total = 100000;
+        const sum3 = filledIndexes.reduce((a, idx) => a + scores[idx], 0);
+        const missingIndex = [0,1,2,3].find(i => scores[i] === null);
+
+        scores[missingIndex] = total - sum3;
+        scoreInputs[missingIndex].value = scores[missingIndex];
+    }
 
     addHanchan(players, scores, seats);
 
