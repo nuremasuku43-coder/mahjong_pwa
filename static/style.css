@@ -39,7 +39,7 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: 16px;
-    padding-bottom: 90px; /* タブの高さ分の余白 */
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
 }
 
 /* =========================================
@@ -141,7 +141,7 @@ th, td {
     z-index: 999;
     display: flex;
     justify-content: space-around;
-    padding: 14px 0 10px;
+    padding: 14px 0 calc(10px + env(safe-area-inset-bottom));
     border-top: 1px solid var(--border-color);
 }
 
